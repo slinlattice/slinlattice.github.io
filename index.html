@@ -5,8 +5,30 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <script type="text/javascript" async defer src="https://rc.d41.co/sync/"></script>
+    <script type="text/javascript" src="https://cdn-0.d41.co/tags/dnb_coretag_v5_rc.min.js"></script>
+    <script type="text/javascript">
+        var apiKey = '';
+
+        setInterval(() => {
+            if (apiKey) {
+                console.log('Firing pixel with API Key: ' + apiKey);
+                dnbvid.getData(apiKey,"json","T",{},function(dnb_Data){
+                    console.log(dnb_Data);
+                });
+            }
+        }, 20000);
+
+        function setApiKey() {
+            apiKey = document.getElementById('api_key_input').value;
+            console.log(apiKey);
+        }
+    </script>
 </head>
 <body>
     <h1>Pixel Fire Test</h1>
+    <h3>API Key:</h3>
+    <input type="text" id="api_key_input">
+    <button onclick="setApiKey()">Set API Key</button>
 </body>
 </html>
