@@ -4,31 +4,54 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="referrer" content="no-referrer-when-downgrade">
     <title>Document</title>
-    <script type="text/javascript" async defer src="https://rc.d41.co/sync/"></script>
+    <script type="text/javascript" src="https://polyfill.io/v3/polyfill.min.js?features=URL%2Cfetch"></script>
     <script type="text/javascript" src="https://cdn-0.d41.co/tags/dnb_coretag_v5_rc.min.js"></script>
     <script type="text/javascript">
-        var apiKey = '';
+        const url = new URL(window.location.href);
 
-        setInterval(() => {
-            if (apiKey) {
-                console.log('Firing pixel with API Key: ' + apiKey);
-                dnbvid.getData(apiKey,"json","T",{},function(dnb_Data){
+        function render() {
+            if (url.searchParams.has('apiKey')) {
+                window.document.head.insertAdjacentElement("beforeend", coretag);
+                fetch(`https://rc.d41.co/sync/`, {
+                    referrerPolicy: "no-referrer-when-downgrade"
+                }).then(() => {
+                    startPixelFireLoop(url.searchParams.get('apiKey'));
+                }).catch((error) => console.error(error));
+            }
+        }
+
+        function startPixelFireLoop(apiKey) {
+            setInterval(() => {
+                console.log(`Firing pixel with API Key: ${apiKey}`);
+                dnbvid.getData(apiKey, "json", "T", {}, function (dnb_Data) {
                     console.log(dnb_Data);
                 });
-            }
-        }, 20000);
-
-        function setApiKey() {
-            apiKey = document.getElementById('api_key_input').value;
-            console.log(apiKey);
+            }, 20000);
         }
+
+        window.addEventListener('load', () => {
+            render();
+        });
     </script>
 </head>
 <body>
+<div>
     <h1>(QA) Pixel Fire Test</h1>
     <h3>API Key:</h3>
     <input type="text" id="api_key_input">
-    <button onclick="setApiKey()">Set API Key</button>
+    <button id="set_api_key">Set API Key</button>
+</div>
+<script type="text/javascript">
+    document.getElementById("set_api_key").onclick = () => {
+        let apiKey = document.getElementById("api_key_input").value;
+        if (apiKey) {
+            let searchParams = new URLSearchParams(url.searchParams);
+            searchParams.set('apiKey', apiKey);
+            window.location.search = searchParams;
+        }
+    }
+</script>
 </body>
 </html>
