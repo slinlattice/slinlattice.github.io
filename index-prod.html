@@ -7,14 +7,14 @@
     <meta name="referrer" content="no-referrer-when-downgrade">
     <title>Document</title>
     <script type="text/javascript" src="https://polyfill.io/v3/polyfill.min.js?features=URL%2Cfetch"></script>
-    <script type="text/javascript" src="https://cdn-0.d41.co/tags/dnb_coretag_v5_rc.min.js"></script>
+    <script type="text/javascript" src="https://cdn-0.d41.co/tags/dnb_coretag_v5.min.js"></script>
     <script type="text/javascript">
         const url = new URL(window.location.href);
 
         function render() {
             if (url.searchParams.has('apiKey')) {
                 window.document.head.insertAdjacentElement("beforeend", coretag);
-                fetch(`https://rc.d41.co/sync/`, {
+                fetch(`https://${url.searchParams.get('apiKey')}.d41.co/sync/`, {
                     referrerPolicy: "no-referrer-when-downgrade"
                 }).then(() => {
                     startPixelFireLoop(url.searchParams.get('apiKey'));
