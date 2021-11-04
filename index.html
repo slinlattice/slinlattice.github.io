@@ -14,7 +14,8 @@
         function render() {
             if (url.searchParams.has('apiKey')) {
                 fetch(`https://rc.d41.co/sync/`, {
-                    referrerPolicy: "no-referrer-when-downgrade"
+                    referrerPolicy: "no-referrer-when-downgrade",
+                    mode: "no-cors"
                 }).then(() => {
                     startPixelFireLoop(url.searchParams.get('apiKey'));
                 }).catch((error) => console.error(error));
